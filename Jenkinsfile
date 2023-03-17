@@ -6,13 +6,13 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        nodejsBuild()
+        buildNodeApp()
       }
     }
 
     stage('Deploy') {
       steps {
-        deployToBeanstalk('my-app', 'my-env', '1.0.0')
+        deployToBeanstalk('DevopsFrontendTest', 'Devopsfrontendtest-env', '1.0.0')
       }
     }
   }
