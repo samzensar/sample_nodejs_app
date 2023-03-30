@@ -1,0 +1,35 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_REGION = 'eu-west-2'
+    APP_NAME = 'frontendservercicd'
+    EB_ENV_NAME = 'frontendservercicd-env'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+	    git credentialsId: 'sam_github', url: 'https://github.com/samzensar/sample_nodejs_app'
+      }
+    }
+	
+    stage('Build') {
+      steps {
+        sh 'npm install'
+        sh 'npm run build'
+      }
+    }
+
+    stage('Deploy to AWS Beanstalk') {
+      steps {
+        withAWS(region: AWS_REGION, credentials: 'aws-creds') {
+          sh 'pip install awsebcli --upgrade'
+          sh "eb init ${APP_NAME} --region ${AWS_REGION} --platform node.js --no-interactive"
+          sh "eb use ${EB_ENV_NAME} --region ${AWS_REGION}"
+          sh "eb deploy --staged --timeout 30"
+        }
+      }
+    }
+  }
+}
