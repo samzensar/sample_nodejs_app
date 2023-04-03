@@ -24,7 +24,7 @@ pipeline {
     stage('Deploy to AWS Beanstalk') {
       steps {
         withAWS(region: AWS_REGION, credentials: 'aws_creds') {
-          sh 'pip install awsebcli --upgrade'
+          sh 'sudo pip3 install awsebcli --upgrade --user'
           sh "eb init ${APP_NAME} --region ${AWS_REGION} --platform node.js --no-interactive"
           sh "eb use ${EB_ENV_NAME} --region ${AWS_REGION}"
           sh "eb deploy --staged --timeout 30"
