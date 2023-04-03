@@ -10,7 +10,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-	    git credentialsId: 'sam_github', url: 'https://github.com/samzensar/sample_nodejs_app'
+	    git branch: 'main' credentialsId: 'sam_github', url: 'https://github.com/samzensar/sample_nodejs_app'
       }
     }
 	
